@@ -1,5 +1,6 @@
-import { useEffect } from "react";
 import { atom, selector } from "recoil";
+
+let localId = "toDo";
 
 export enum Categories {
   "TO_DO" = "TO_DO",
@@ -12,21 +13,23 @@ export interface IToDo {
   id: number;
 }
 
-let localId = "toDo";
-let localList = JSON.parse(localStorage.getItem(localId) as any);
+const localStorageEffect =
+  (key: string) =>
+  ({ setSelf, onSet }: any) => {
+    const savedValue = localStorage.getItem(localId);
+    if (savedValue != null) {
+      setSelf(JSON.parse(savedValue));
+    }
+    onSet((newValue: any, _: any, isReset: boolean) => {
+      isReset
+        ? localStorage.removeItem(localId)
+        : localStorage.setItem(localId, JSON.stringify(newValue));
+    });
+  };
 export const toDoState = atom<IToDo[]>({
-  key: localId,
-  default: localList,
-  effects: [
-    ({ onSet }) => {
-      onSet(() => {
-        useEffect(() => {
-          localStorage.setItem(localId, JSON.parse());
-        });
-        localStorage.setItem(localId, localList);
-      });
-    },
-  ],
+  key: "toDo",
+  default: [],
+  effects: [localStorageEffect(localId)],
 });
 
 export const categoryState = atom<Categories>({
