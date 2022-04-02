@@ -1,10 +1,11 @@
 import { Draggable } from "react-beautiful-dnd";
-import { useRecoilState } from "recoil";
-import { toDoState } from "../atoms";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { toDoState, trashbinState } from "../atoms";
 import styled from "styled-components";
 import React from "react";
 interface ICardProps {
   isDragging: boolean;
+  trashCanVisible?: any;
 }
 const Card = styled.div<ICardProps>`
   border-radius: 5px;

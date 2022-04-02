@@ -1,3 +1,5 @@
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import {
   DragDropContext,
@@ -15,17 +17,21 @@ const Wrapper = styled.div`
   width: 100%;
   margin: 0 auto;
   justify-content: center;
-  align-items: center;
   height: 100vh;
+  padding: 100px 10px;
 `;
 
 const Boards = styled.div`
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(3, 1fr);
+  height: inherit;
+  grid-template-columns: repeat(3, 300px);
   gap: 10px;
+  svg:nth-child(4) {
+    width: 30px;
+    height: 30px;
+  }
 `;
-
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const onDragEnd = (info: DropResult) => {
@@ -43,7 +49,11 @@ function App() {
           [source.droppableId]: tempToDos,
         };
       });
-    } else {
+    }
+    if (
+      destination?.droppableId !== source.droppableId &&
+      destination?.droppableId !== "trashCan"
+    ) {
       setToDos((allBoards) => {
         const currentBoard = [...allBoards[source.droppableId]];
         const taskObj = currentBoard[source.index];
@@ -54,6 +64,15 @@ function App() {
           ...allBoards,
           [source.droppableId]: currentBoard,
           [destination?.droppableId]: targetBoard,
+        };
+      });
+    } else if (destination?.droppableId === "trashCan") {
+      setToDos((allBoards) => {
+        const currentBoard = [...allBoards[source.droppableId]];
+        currentBoard.splice(source.index, 1);
+        return {
+          ...allBoards,
+          [source.droppableId]: currentBoard,
         };
       });
     }

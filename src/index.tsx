@@ -63,12 +63,26 @@ body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
   background-color:${(props) => props.theme.bgColor};
-  color:black;
+  color:"black";
   line-height: 1.2;
 }
 a {
   text-decoration:none;
   color:inherit;
+}
+textarea {
+    border: none;
+    overflow: auto;
+    outline: none;
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+
+    resize: none; /*remove the resize handle on the bottom right*/
+}
+input {
+  all: unset;
 }
 `;
 
