@@ -5,9 +5,8 @@ import Card from "./Card";
 
 const CardBoard = styled.div`
   background-color: ${(props) => props.theme.boardColor};
-  min-height: 400px;
+  min-height: 200px;
   padding: 10px 10px;
-  gap: 10px;
   border-radius: 8px;
   width: 150px;
   margin-right: 10px;

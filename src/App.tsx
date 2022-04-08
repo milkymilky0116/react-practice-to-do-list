@@ -9,10 +9,11 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { boardState, toDoState } from "./atoms";
 import Board from "./Components/Board";
+import Boards from "./Components/Boards";
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 600vw;
+  max-width: 1000vw;
   width: 100%;
   margin: 0 auto;
   justify-content: center;
@@ -20,22 +21,18 @@ const Wrapper = styled.div`
   height: 100vh;
 `;
 
-const Boards = styled.div`
-  display: flex;
-  width: 650px;
-  justify-content: center;
-  align-items: center;
-`;
-
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const [boardList, setBoardList] = useRecoilState(boardState);
+  console.log(boardList);
   useEffect(() => {
     setBoardList(() => {
       const boardList = Object.keys(toDos);
       return boardList;
     });
   }, [toDos]);
+  useEffect(() => {});
+
   const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
     if (!destination) return;
     if (destination.droppableId === "board") {
@@ -45,6 +42,7 @@ function App() {
         tempList.splice(destination.index, 0, draggableId);
         return tempList;
       });
+      console.log(toDos);
     } else {
       if (destination.droppableId !== source.droppableId) {
         setToDos((allBoards) => {
@@ -75,27 +73,7 @@ function App() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
-        <Droppable droppableId="board" type="CARD" direction="horizontal">
-          {(provided) => (
-            <Boards ref={provided.innerRef} {...provided.droppableProps}>
-              {boardList.map((boardId, index) => (
-                <Draggable key={boardId} draggableId={boardId} index={index}>
-                  {(provided) => (
-                    <div
-                      key={boardId}
-                      ref={provided.innerRef}
-                      {...provided.dragHandleProps}
-                      {...provided.draggableProps}
-                    >
-                      <Board toDos={toDos[boardId]} boardId={boardId}></Board>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </Boards>
-          )}
-        </Droppable>
+        <Boards boardList={boardList} toDos={toDos} />
       </Wrapper>
     </DragDropContext>
   );
