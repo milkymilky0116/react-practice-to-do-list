@@ -8,6 +8,12 @@ export interface IToDo {
 export interface IToDoState {
   [key: string]: IToDo[];
 }
+interface IMenuState {
+  isAppear: boolean;
+  positionX: number;
+  positionY: number;
+  boardId: string;
+}
 export const localStorageEffect =
   (id: string) =>
   ({ setSelf, onSet }: any) => {
@@ -17,12 +23,21 @@ export const localStorageEffect =
     }
 
     onSet((newValue: any, _: any, isReset: boolean) => {
-      console.log(newValue);
       isReset
         ? localStorage.removeItem(id)
         : localStorage.setItem(id, JSON.stringify(newValue));
     });
   };
+
+export const menuState = atom<IMenuState>({
+  key: "menu",
+  default: {
+    isAppear: false,
+    positionX: 0,
+    positionY: 0,
+    boardId: "",
+  },
+});
 export const toDoState = atom<IToDoState>({
   key: localId,
   default: {

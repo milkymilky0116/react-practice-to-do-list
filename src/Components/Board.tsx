@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import Card from "./Card";
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
-import { IToDo, toDoState } from "../atoms";
-
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { IToDo, menuState, toDoState } from "../atoms";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import MenuElement from "./Menu";
 const Wrapper = styled.div`
   background-color: ${(props) => props.theme.boardColor};
   width: 300px;
@@ -20,6 +22,8 @@ const TopMenu = styled.div`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   padding: 10px 10px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Title = styled.h1`
@@ -43,7 +47,23 @@ const Form = styled.form`
     box-shadow: 1px 1px 0px 1px rgba(0, 0, 0, 0.42);
   }
 `;
-
+const Menu = styled.div`
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  :hover {
+    background-color: grey;
+    svg {
+      opacity: 1;
+    }
+  }
+  svg {
+    opacity: 0.4;
+  }
+`;
 interface BoardInterface {
   boardList: string[];
   toDos: IToDo[];
@@ -55,6 +75,7 @@ interface FormInterface {
 function Board({ boardList, toDos, boardId }: BoardInterface) {
   const setToDos = useSetRecoilState(toDoState);
   const { register, setValue, handleSubmit } = useForm<FormInterface>();
+  const [isMenuAppear, setMenuState] = useRecoilState(menuState);
   const onValid = ({ toDo }: FormInterface) => {
     const newToDo = {
       id: Date.now(),
@@ -68,11 +89,27 @@ function Board({ boardList, toDos, boardId }: BoardInterface) {
     });
     setValue("toDo", "");
   };
+  const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { pageX, pageY } = event;
+    setMenuState((MenuState) => {
+      const { isAppear } = MenuState;
+      return {
+        isAppear: !isAppear,
+        positionX: pageX,
+        positionY: pageY,
+        boardId,
+      };
+    });
+  };
   return (
     <>
       <TopMenu>
         <Title>{boardId}</Title>
+        <Menu onClick={onClick}>
+          <FontAwesomeIcon icon={faEllipsis} />
+        </Menu>
       </TopMenu>
+      {isMenuAppear.isAppear ? <MenuElement /> : null}
       <Droppable droppableId={boardId}>
         {(provided) => (
           <CardBoard ref={provided.innerRef} {...provided.droppableProps}>

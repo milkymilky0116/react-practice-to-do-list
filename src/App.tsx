@@ -11,6 +11,13 @@ import { boardId, boardState, IToDo, IToDoState, toDoState } from "./atoms";
 import Board from "./Components/Board";
 import Boards from "./Components/Boards";
 
+const Overlay = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: black;
+  opacity: 0.4;
+`;
 const Wrapper = styled.div`
   display: flex;
   max-width: 1500vw;
@@ -72,13 +79,13 @@ function App() {
     }
   };
   return (
-    <div>
+    <>
       <DragDropContext onDragEnd={onDragEnd}>
         <Wrapper>
           <Boards boardList={boardList} toDos={toDos} />
         </Wrapper>
       </DragDropContext>
-    </div>
+    </>
   );
 }
 
