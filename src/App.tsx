@@ -7,7 +7,7 @@ import {
 } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { boardState, IToDo, IToDoState, toDoState } from "./atoms";
+import { boardId, boardState, IToDo, IToDoState, toDoState } from "./atoms";
 import Board from "./Components/Board";
 import Boards from "./Components/Boards";
 
@@ -23,12 +23,13 @@ const Wrapper = styled.div`
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const [boardList, setBoardList] = useRecoilState(boardState);
-  console.log(toDos);
   useEffect(() => {
-    setBoardList(() => {
-      const tempboardList = Object.keys(toDos);
-      console.log(tempboardList);
-      return tempboardList;
+    setBoardList((oldBoard) => {
+      if (!localStorage.getItem(boardId)) {
+        const tempboardList = Object.keys(toDos);
+        return tempboardList;
+      }
+      return oldBoard;
     });
   }, []);
 
