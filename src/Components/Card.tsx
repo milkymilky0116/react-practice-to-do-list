@@ -11,12 +11,13 @@ const Element = styled.div`
   border-radius: 5px;
 `;
 interface CardInterface {
+  toDoId: number;
   item: string;
   index: number;
 }
-function Card({ item, index }: CardInterface) {
+function Card({ toDoId, item, index }: CardInterface) {
   return (
-    <Draggable key={item} draggableId={item} index={index}>
+    <Draggable key={item} draggableId={toDoId + ""} index={index}>
       {(provided) => (
         <Element
           ref={provided.innerRef}

@@ -26,7 +26,11 @@ function Boards({ boardList, toDos }: BoardsInterface) {
                   {...provided.dragHandleProps}
                   {...provided.draggableProps}
                 >
-                  <Board toDos={toDos[boardId]} boardId={boardId}></Board>
+                  <Board
+                    boardList={boardList}
+                    toDos={toDos[boardId]}
+                    boardId={boardId}
+                  ></Board>
                 </div>
               )}
             </Draggable>

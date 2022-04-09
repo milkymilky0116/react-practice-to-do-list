@@ -7,7 +7,7 @@ import {
 } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { boardState, toDoState } from "./atoms";
+import { boardState, IToDo, IToDoState, toDoState } from "./atoms";
 import Board from "./Components/Board";
 import Boards from "./Components/Boards";
 
@@ -24,14 +24,21 @@ const Wrapper = styled.div`
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const [boardList, setBoardList] = useRecoilState(boardState);
-  console.log(boardList);
+
+  const orderByList = (a: string, b: string) => {
+    if (boardList.indexOf(a) > boardList.indexOf(b)) {
+      return -1;
+    } else {
+      return 1;
+    }
+  };
   useEffect(() => {
     setBoardList(() => {
-      const boardList = Object.keys(toDos);
-      return boardList;
+      const tempboardList = Object.keys(toDos);
+      console.log(tempboardList);
+      return tempboardList;
     });
-  }, [toDos]);
-  useEffect(() => {});
+  }, []);
 
   const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
     if (!destination) return;
@@ -42,14 +49,14 @@ function App() {
         tempList.splice(destination.index, 0, draggableId);
         return tempList;
       });
-      console.log(toDos);
     } else {
       if (destination.droppableId !== source.droppableId) {
         setToDos((allBoards) => {
           const sourceBoards = [...allBoards[source.droppableId]];
           const destinationBoards = [...allBoards[destination.droppableId]];
+          const newObj = sourceBoards[source.index];
           sourceBoards.splice(source.index, 1);
-          destinationBoards.splice(destination.index, 0, draggableId);
+          destinationBoards.splice(destination.index, 0, newObj);
           return {
             ...allBoards,
             [source.droppableId]: sourceBoards,
@@ -60,8 +67,9 @@ function App() {
       if (destination.droppableId === source.droppableId) {
         setToDos((allBoards) => {
           const sourceBoards = [...allBoards[source.droppableId]];
+          const newObj = sourceBoards[source.index];
           sourceBoards.splice(source.index, 1);
-          sourceBoards.splice(destination.index, 0, draggableId);
+          sourceBoards.splice(destination.index, 0, newObj);
           return {
             ...allBoards,
             [source.droppableId]: sourceBoards,

@@ -3,17 +3,17 @@ export interface IToDo {
   id: number;
   text: string;
 }
-interface IToDoState {
-  [key: string]: string[];
+export interface IToDoState {
+  [key: string]: IToDo[];
 }
 
 export const toDoState = atom<IToDoState>({
   key: "toDo",
   default: {
-    "To Do": ["a", "b", "c"],
-    Doing: ["d", "e"],
-    Done: ["f", "g"],
-    Test: ["h", "i"],
+    "To Do": [],
+    Doing: [],
+    Done: [],
+    Test: [],
   },
 });
 
