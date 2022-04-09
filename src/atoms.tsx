@@ -1,4 +1,6 @@
 import { atom, selector, useRecoilState } from "recoil";
+let localId = "toDo";
+let localList = JSON.parse(localStorage.getItem(localId) as any);
 export interface IToDo {
   id: number;
   text: string;
@@ -8,7 +10,7 @@ export interface IToDoState {
 }
 
 export const toDoState = atom<IToDoState>({
-  key: "toDo",
+  key: localId,
   default: {
     "To Do": [],
     Doing: [],

@@ -5,15 +5,45 @@ import Card from "./Card";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import { IToDo, toDoState } from "../atoms";
+
+const Wrapper = styled.div`
+  background-color: ${(props) => props.theme.boardColor};
+  width: 300px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 10px 10px;
+`;
+
+const TopMenu = styled.div`
+  background-color: ${(props) => props.theme.boardColor};
+  width: 300px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 10px 10px;
+`;
+
+const Title = styled.h1`
+  font-weight: 600;
+`;
 const CardBoard = styled.div`
   background-color: ${(props) => props.theme.boardColor};
   min-height: 400px;
   padding: 10px 10px;
-  border-radius: 8px;
-  width: 150px;
+  width: 300px;
   margin-right: 10px;
 `;
-const Form = styled.form``;
+const Form = styled.form`
+  input {
+    font-size: 15px;
+    background-color: white;
+    height: 30px;
+    width: 280px;
+    border-radius: 3px;
+    text-align: center;
+    box-shadow: 1px 1px 0px 1px rgba(0, 0, 0, 0.42);
+  }
+`;
+
 interface BoardInterface {
   boardList: string[];
   toDos: IToDo[];
@@ -39,14 +69,10 @@ function Board({ boardList, toDos, boardId }: BoardInterface) {
     setValue("toDo", "");
   };
   return (
-    <div>
-      <Form onSubmit={handleSubmit(onValid)}>
-        <input
-          {...register("toDo", { required: true })}
-          type="text"
-          placeholder={`Add task on ${boardId}`}
-        />
-      </Form>
+    <>
+      <TopMenu>
+        <Title>{boardId}</Title>
+      </TopMenu>
       <Droppable droppableId={boardId}>
         {(provided) => (
           <CardBoard ref={provided.innerRef} {...provided.droppableProps}>
@@ -62,7 +88,16 @@ function Board({ boardList, toDos, boardId }: BoardInterface) {
           </CardBoard>
         )}
       </Droppable>
-    </div>
+      <Wrapper>
+        <Form onSubmit={handleSubmit(onValid)}>
+          <input
+            {...register("toDo", { required: true })}
+            type="text"
+            placeholder={`Add task on ${boardId}`}
+          />
+        </Form>
+      </Wrapper>
+    </>
   );
 }
 

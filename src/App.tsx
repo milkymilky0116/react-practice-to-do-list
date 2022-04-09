@@ -13,25 +13,17 @@ import Boards from "./Components/Boards";
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 1000vw;
+  max-width: 1500vw;
   width: 100%;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
   height: 100vh;
 `;
-
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const [boardList, setBoardList] = useRecoilState(boardState);
-
-  const orderByList = (a: string, b: string) => {
-    if (boardList.indexOf(a) > boardList.indexOf(b)) {
-      return -1;
-    } else {
-      return 1;
-    }
-  };
+  console.log(toDos);
   useEffect(() => {
     setBoardList(() => {
       const tempboardList = Object.keys(toDos);
@@ -79,11 +71,13 @@ function App() {
     }
   };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Wrapper>
-        <Boards boardList={boardList} toDos={toDos} />
-      </Wrapper>
-    </DragDropContext>
+    <div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Wrapper>
+          <Boards boardList={boardList} toDos={toDos} />
+        </Wrapper>
+      </DragDropContext>
+    </div>
   );
 }
 
