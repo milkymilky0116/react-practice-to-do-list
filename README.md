@@ -1,6 +1,6 @@
 # Create To Do List
 
-![image](https://user-images.githubusercontent.com/84823612/162572373-c7f5cc29-af1b-40b1-a568-a8d040609c5e.png)
+![image](https://velog.velcdn.com/images/milkymilky0116/post/2a597a52-fbc1-4993-9176-8df1e029cbbf/image.png)
 
 - 스타일 꾸미기 ( )
 - 작성한 모든 투두를 localStorage에 저장 및 로드하기 ( ✔ )
