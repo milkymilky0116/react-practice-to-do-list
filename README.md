@@ -1,4 +1,5 @@
 # Create To Do List
+
 ![image](https://user-images.githubusercontent.com/84823612/162572373-c7f5cc29-af1b-40b1-a568-a8d040609c5e.png)
 
 - 스타일 꾸미기 ( )
@@ -9,4 +10,4 @@
 - 보드가 가진 투두 전체 삭제 ( ✔ )
 - 보드 삭제 ( ✔ )
 - 투두 수정 ( )
-- 보드 제목 수정 ( )
+- 보드 제목 수정 ( ✔ )
