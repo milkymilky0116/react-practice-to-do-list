@@ -5,6 +5,10 @@ export interface IToDo {
   id: number;
   text: string;
 }
+
+export interface IForm {
+  isAppear: boolean;
+}
 export interface IToDoState {
   [key: string]: IToDo[];
 }
@@ -16,6 +20,7 @@ interface IMenuState {
 }
 
 interface IFormAppearState {
+  id: string;
   isAppear: boolean;
 }
 export const localStorageEffect =
@@ -61,6 +66,7 @@ export const boardState = atom<string[]>({
 export const formState = atom<IFormAppearState>({
   key: "form",
   default: {
+    id: "",
     isAppear: false,
   },
 });

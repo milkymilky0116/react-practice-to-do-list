@@ -129,8 +129,9 @@ function Board({ isDragging, toDos, boardId }: BoardInterface) {
       <Droppable droppableId={boardId}>
         {(provided) => (
           <CardBoard ref={provided.innerRef} {...provided.droppableProps}>
-            {toDos.map((item, index) => (
+            {toDos?.map((item, index) => (
               <Card
+                boardId={boardId}
                 key={index}
                 toDoId={item.id}
                 item={item.text}

@@ -25,12 +25,13 @@ function TextForm() {
   const [isMenuAppear, setMenuState] = useRecoilState(menuState);
   const onTitleValid = ({ text }: FormInterface) => {
     setBoardState((oldBoards) => {
+      if (oldBoards.find((element) => element == text)) return oldBoards;
       const targetIndex = oldBoards.indexOf(isMenuAppear.boardId);
       const tempArr = [...oldBoards];
       tempArr.splice(targetIndex, 1);
       tempArr.splice(targetIndex, 0, text);
       console.log(tempArr);
-      return oldBoards;
+      return tempArr;
     });
 
     setToDos((oldToDos) => {
@@ -43,7 +44,7 @@ function TextForm() {
         {}
       );
       console.log(tempAllBoards);
-      return { ...oldToDos };
+      return { ...tempAllBoards };
     });
 
     setFormState((prevState) => {
