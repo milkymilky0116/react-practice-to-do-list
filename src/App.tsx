@@ -7,7 +7,14 @@ import {
 } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { boardId, boardState, IToDo, IToDoState, toDoState } from "./atoms";
+import {
+  boardId,
+  boardState,
+  IToDo,
+  IToDoState,
+  localId,
+  toDoState,
+} from "./atoms";
 import Board from "./Components/Board";
 import Boards from "./Components/Boards";
 
@@ -38,6 +45,9 @@ function App() {
       }
       return oldBoard;
     });
+    setToDos((oldToDos) => {
+      return oldToDos;
+    });
   }, []);
 
   const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
@@ -48,6 +58,15 @@ function App() {
         tempList.splice(source.index, 1);
         tempList.splice(destination.index, 0, draggableId);
         return tempList;
+      });
+    } else if (destination.droppableId === "trashCan") {
+      setToDos((allBoards) => {
+        const sourceBoards = [...allBoards[source.droppableId]];
+        sourceBoards.splice(source.index, 1);
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceBoards,
+        };
       });
     } else {
       if (destination.droppableId !== source.droppableId) {

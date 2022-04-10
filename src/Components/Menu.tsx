@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { boardId, boardState, menuState, toDoState } from "../atoms";
+import { boardId, boardState, formState, menuState, toDoState } from "../atoms";
 interface MenuInterface {
   position: number[];
 }
@@ -42,6 +42,7 @@ function MenuElement() {
   const setToDoState = useSetRecoilState(toDoState);
   const setBoardState = useSetRecoilState(boardState);
   const setMenuState = useSetRecoilState(menuState);
+  const setFormState = useSetRecoilState(formState);
   const onBoardDelete = () => {
     setToDoState((oldToDos) => {
       const tempToDos = { ...oldToDos };
@@ -75,6 +76,20 @@ function MenuElement() {
       };
     });
   };
+  const onEditBoardTitle = () => {
+    setFormState((prevState) => {
+      return {
+        ...prevState,
+        isAppear: true,
+      };
+    });
+    setMenuState((prevState) => {
+      return {
+        ...prevState,
+        isAppear: false,
+      };
+    });
+  };
   return (
     <BoxMenu
       topX={menuValue.positionX - 130 + "px"}
@@ -85,6 +100,9 @@ function MenuElement() {
       </SubElement>
       <SubElement onClick={onToDoDelete}>
         <span>Delete All To Dos</span>
+      </SubElement>
+      <SubElement onClick={onEditBoardTitle}>
+        <span>Edit Board Title</span>
       </SubElement>
     </BoxMenu>
   );

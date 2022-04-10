@@ -1,5 +1,5 @@
 import { atom, selector, useRecoilState } from "recoil";
-const localId = "toDo";
+export const localId = "toDo";
 export const boardId = "board";
 export interface IToDo {
   id: number;
@@ -13,6 +13,10 @@ interface IMenuState {
   positionX: number;
   positionY: number;
   boardId: string;
+}
+
+interface IFormAppearState {
+  isAppear: boolean;
 }
 export const localStorageEffect =
   (id: string) =>
@@ -52,4 +56,11 @@ export const boardState = atom<string[]>({
   key: "board",
   default: [],
   effects: [localStorageEffect(boardId)],
+});
+
+export const formState = atom<IFormAppearState>({
+  key: "form",
+  default: {
+    isAppear: false,
+  },
 });

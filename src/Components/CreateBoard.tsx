@@ -2,19 +2,21 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import { boardState, toDoState } from "../atoms";
-const CreateBtn = styled.div`
-  position: relative;
+import TrashCan from "./TrashCan";
+const Wrapper = styled.div`
   width: 300px;
-  height: 150px;
-  background-color: ${(props) => props.theme.boardColor};
-  border-radius: 8px;
-  bottom: 170px;
-  display: flex;
-  padding: 10px 10px;
-  justify-content: center;
-  align-items: center;
+  height: 500px;
 `;
 const Form = styled.form`
+  width: 100%;
+  height: 50px;
+  background-color: ${(props) => props.theme.boardColor};
+  border-radius: 8px;
+  display: flex;
+  padding: 10px 10px;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0.5px 0.5px 0px 0.5px rgba(0, 0, 0, 0.2);
   input {
     font-size: 15px;
     background-color: white;
@@ -22,8 +24,9 @@ const Form = styled.form`
     width: 280px;
     border-radius: 3px;
     text-align: center;
-    box-shadow: 1px 1px 0px 1px rgba(0, 0, 0, 0.42);
+    box-shadow: 0.5px 0.5px 0px 0.5px rgba(0, 0, 0, 0.2);
   }
+  margin-bottom: 10px;
 `;
 interface FormInterface {
   title: string;
@@ -42,15 +45,18 @@ function CreateBoard() {
     setValue("title", "");
   };
   return (
-    <CreateBtn>
-      <Form onSubmit={handleSubmit(onValid)}>
-        <input
-          {...register("title", { required: true })}
-          type="text"
-          placeholder="Create a board"
-        ></input>
-      </Form>
-    </CreateBtn>
+    <>
+      <Wrapper>
+        <Form onSubmit={handleSubmit(onValid)}>
+          <input
+            {...register("title", { required: true })}
+            type="text"
+            placeholder="Create a board"
+          ></input>
+        </Form>
+        <TrashCan />
+      </Wrapper>
+    </>
   );
 }
 

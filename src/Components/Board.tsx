@@ -3,17 +3,20 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import Card from "./Card";
 import { useForm } from "react-hook-form";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { IToDo, menuState, toDoState } from "../atoms";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { formState, IToDo, menuState, toDoState } from "../atoms";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MenuElement from "./Menu";
+import TrashCan from "./TrashCan";
+import TextForm from "./TitleForm";
 const Wrapper = styled.div`
   background-color: ${(props) => props.theme.boardColor};
   width: 300px;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   padding: 10px 10px;
+  box-shadow: 0.5px 0.5px 0px 0.5px rgba(0, 0, 0, 0.2);
 `;
 
 const TopMenu = styled.div`
@@ -24,6 +27,7 @@ const TopMenu = styled.div`
   padding: 10px 10px;
   display: flex;
   justify-content: space-between;
+  box-shadow: 0.5px 0.5px 0px 0.5px rgba(0, 0, 0, 0.2);
 `;
 
 const Title = styled.h1`
@@ -35,6 +39,7 @@ const CardBoard = styled.div`
   padding: 10px 10px;
   width: 300px;
   margin-right: 10px;
+  box-shadow: 0.5px 0.5px 0px 0.5px rgba(0, 0, 0, 0.2);
 `;
 const Form = styled.form`
   input {
@@ -44,7 +49,7 @@ const Form = styled.form`
     width: 280px;
     border-radius: 3px;
     text-align: center;
-    box-shadow: 1px 1px 0px 1px rgba(0, 0, 0, 0.42);
+    box-shadow: 0.5px 0.5px 0px 0.5px rgba(0, 0, 0, 0.2);
   }
 `;
 const Menu = styled.div`
@@ -64,22 +69,26 @@ const Menu = styled.div`
     opacity: 0.4;
   }
 `;
+
 interface BoardInterface {
   boardList: string[];
   toDos: IToDo[];
   boardId: string;
+  isDragging?: boolean;
 }
 interface FormInterface {
-  toDo: string;
+  text: string;
 }
-function Board({ boardList, toDos, boardId }: BoardInterface) {
+function Board({ isDragging, toDos, boardId }: BoardInterface) {
   const setToDos = useSetRecoilState(toDoState);
+  const setFormState = useSetRecoilState(formState);
   const { register, setValue, handleSubmit } = useForm<FormInterface>();
   const [isMenuAppear, setMenuState] = useRecoilState(menuState);
-  const onValid = ({ toDo }: FormInterface) => {
+  const isFormAppear = useRecoilValue(formState);
+  const onValid = ({ text }: FormInterface) => {
     const newToDo = {
       id: Date.now(),
-      text: toDo,
+      text,
     };
     setToDos((allBoards) => {
       return {
@@ -87,8 +96,9 @@ function Board({ boardList, toDos, boardId }: BoardInterface) {
         [boardId]: [newToDo, ...allBoards[boardId]],
       };
     });
-    setValue("toDo", "");
+    setValue("text", "");
   };
+
   const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
     const { pageX, pageY } = event;
     setMenuState((MenuState) => {
@@ -104,10 +114,16 @@ function Board({ boardList, toDos, boardId }: BoardInterface) {
   return (
     <>
       <TopMenu>
-        <Title>{boardId}</Title>
-        <Menu onClick={onClick}>
-          <FontAwesomeIcon icon={faEllipsis} />
-        </Menu>
+        {isFormAppear.isAppear ? (
+          <TextForm />
+        ) : (
+          <>
+            <Title>{boardId}</Title>
+            <Menu onClick={onClick}>
+              <FontAwesomeIcon icon={faEllipsis} />
+            </Menu>
+          </>
+        )}
       </TopMenu>
       {isMenuAppear.isAppear ? <MenuElement /> : null}
       <Droppable droppableId={boardId}>
@@ -128,7 +144,7 @@ function Board({ boardList, toDos, boardId }: BoardInterface) {
       <Wrapper>
         <Form onSubmit={handleSubmit(onValid)}>
           <input
-            {...register("toDo", { required: true })}
+            {...register("text", { required: true })}
             type="text"
             placeholder={`Add task on ${boardId}`}
           />
